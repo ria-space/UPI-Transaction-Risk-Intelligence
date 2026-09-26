@@ -1,4 +1,4 @@
-# UPI Transaction Risk Intelligence
+# UPI Transaction Risk Intelligence 
 
 An end-to-end data analytics and fraud risk intelligence project built using **Python, SQL, MySQL, Power BI, and DAX**.
 
@@ -180,6 +180,9 @@ Analyzes factors associated with transaction risk, including:
 
 Provides a more detailed transaction-level view for investigating individual transactions and their associated risk characteristics.
 
+![Executive Risk Overview](./reports/screenshots/01_executive_risk_overview.png)
+![Risk Drivers](./reports/screenshots/02_risk_drivers.png)
+![Transaction Investigation](./reports/screenshots/03_transaction_investigation.png)
 **Power BI File**
 
 The complete Power BI dashboard is available here:
