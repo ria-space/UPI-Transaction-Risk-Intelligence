@@ -180,6 +180,12 @@ Analyzes factors associated with transaction risk, including:
 
 Provides a more detailed transaction-level view for investigating individual transactions and their associated risk characteristics.
 
+**Power BI File**
+
+The complete Power BI dashboard is available here:
+
+UPI_Transaction_Risk_Intelligence.pbix
+
 ---
 
 ## Key Findings
