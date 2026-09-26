@@ -1,0 +1,552 @@
+USE upi_risk_intelligence;
+
+
+-- =====================================================
+-- 1. Overall transaction summary
+-- =====================================================
+
+SELECT
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    COUNT(*) - SUM(fraud_flag) AS normal_transactions,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions;
+
+
+-- =====================================================
+-- 2. Fraud performance by risk tier
+-- =====================================================
+
+SELECT
+    risk_tier,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY risk_tier
+ORDER BY
+    CASE risk_tier
+        WHEN 'Low' THEN 1
+        WHEN 'Medium' THEN 2
+        WHEN 'High' THEN 3
+    END;
+
+
+-- =====================================================
+-- 3. Fraud by transaction type
+-- =====================================================
+
+SELECT
+    transaction_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY transaction_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 4. High-value transaction analysis
+-- =====================================================
+
+SELECT
+    CASE
+        WHEN high_value_flag = 1 THEN 'High Value'
+        ELSE 'Standard Value'
+    END AS transaction_value_group,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY high_value_flag
+ORDER BY high_value_flag;
+
+
+-- =====================================================
+-- 5. Fraud by network type
+-- =====================================================
+
+SELECT
+    network_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY network_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 6. Fraud by sender state
+-- =====================================================
+
+SELECT
+    sender_state,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY sender_state
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 7. Fraud by device type
+-- =====================================================
+
+SELECT
+    device_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY device_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 8. Hourly fraud pattern
+-- =====================================================
+
+SELECT
+    hour_of_day,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY hour_of_day
+ORDER BY hour_of_day;
+
+
+-- =====================================================
+-- 9. Monthly fraud trend
+-- =====================================================
+
+SELECT
+    DATE_FORMAT(transaction_timestamp, '%Y-%m') AS transaction_month,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY DATE_FORMAT(transaction_timestamp, '%Y-%m')
+ORDER BY transaction_month;
+-- =====================================================
+-- 1. OVERALL TRANSACTION SUMMARY
+-- =====================================================
+
+SELECT
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    COUNT(*) - SUM(fraud_flag) AS normal_transactions,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions;
+
+
+-- =====================================================
+-- 2. FRAUD PERFORMANCE BY RISK TIER
+-- =====================================================
+
+SELECT
+    risk_tier,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY risk_tier
+ORDER BY
+    CASE risk_tier
+        WHEN 'Low' THEN 1
+        WHEN 'Medium' THEN 2
+        WHEN 'High' THEN 3
+    END;
+
+
+-- =====================================================
+-- 3. FRAUD BY TRANSACTION TYPE
+-- =====================================================
+
+SELECT
+    transaction_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY transaction_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 4. HIGH-VALUE VS STANDARD-VALUE TRANSACTIONS
+-- =====================================================
+
+SELECT
+    CASE
+        WHEN high_value_flag = 1 THEN 'High Value'
+        ELSE 'Standard Value'
+    END AS transaction_value_group,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY high_value_flag
+ORDER BY high_value_flag;
+
+
+-- =====================================================
+-- 5. FRAUD BY NETWORK TYPE
+-- =====================================================
+
+SELECT
+    network_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY network_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 6. FRAUD BY SENDER STATE
+-- =====================================================
+
+SELECT
+    sender_state,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY sender_state
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 7. FRAUD BY DEVICE TYPE
+-- =====================================================
+
+SELECT
+    device_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY device_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 8. FRAUD BY MERCHANT CATEGORY
+-- =====================================================
+
+SELECT
+    merchant_category,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY merchant_category
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 9. FRAUD BY SENDER AGE GROUP
+-- =====================================================
+
+SELECT
+    sender_age_group,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY sender_age_group
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 10. FRAUD BY RECEIVER AGE GROUP
+-- =====================================================
+
+SELECT
+    receiver_age_group,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY receiver_age_group
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 11. FRAUD BY HOUR
+-- =====================================================
+
+SELECT
+    hour_of_day,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY hour_of_day
+ORDER BY hour_of_day;
+
+
+-- =====================================================
+-- 12. FRAUD BY TIME PERIOD
+-- =====================================================
+
+SELECT
+    time_period,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY time_period
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 13. WEEKDAY VS WEEKEND
+-- =====================================================
+
+SELECT
+    CASE
+        WHEN is_weekend = 1 THEN 'Weekend'
+        ELSE 'Weekday'
+    END AS day_group,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY is_weekend
+ORDER BY is_weekend;
+
+
+-- =====================================================
+-- 14. MONTHLY TRANSACTION AND FRAUD TREND
+-- =====================================================
+
+SELECT
+    DATE_FORMAT(transaction_timestamp, '%Y-%m') AS transaction_month,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY DATE_FORMAT(transaction_timestamp, '%Y-%m')
+ORDER BY transaction_month;
+
+
+-- =====================================================
+-- 15. RISK SCORE DISTRIBUTION
+-- =====================================================
+
+SELECT
+    risk_score,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY risk_score
+ORDER BY risk_score;
+
+
+-- =====================================================
+-- 16. HIGH-RISK TRANSACTION INVESTIGATION
+-- =====================================================
+
+SELECT
+    COUNT(*) AS high_risk_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+WHERE risk_tier = 'High';
+
+
+-- =====================================================
+-- 17. TRANSACTION TYPE + NETWORK COMBINATION
+-- =====================================================
+
+SELECT
+    transaction_type,
+    network_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY
+    transaction_type,
+    network_type
+HAVING COUNT(*) >= 5000
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 18. TRANSACTION TYPE + DEVICE COMBINATION
+-- =====================================================
+
+SELECT
+    transaction_type,
+    device_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY
+    transaction_type,
+    device_type
+HAVING COUNT(*) >= 1000
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 19. HIGH-VALUE + NETWORK COMBINATION
+-- =====================================================
+
+SELECT
+    CASE
+        WHEN high_value_flag = 1 THEN 'High Value'
+        ELSE 'Standard Value'
+    END AS value_group,
+    network_type,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY
+    high_value_flag,
+    network_type
+ORDER BY fraud_rate_pct DESC;
+
+
+-- =====================================================
+-- 20. TOP STATES BY FRAUD CASE COUNT
+-- =====================================================
+
+SELECT
+    sender_state,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct
+FROM upi_transactions
+GROUP BY sender_state
+HAVING COUNT(*) >= 10000
+ORDER BY fraud_cases DESC;
+-- =====================================================
+-- 21. CTE: FRAUD CONCENTRATION BY RISK TIER
+-- =====================================================
+
+WITH risk_summary AS (
+    SELECT
+        risk_tier,
+        COUNT(*) AS total_transactions,
+        SUM(fraud_flag) AS fraud_cases
+    FROM upi_transactions
+    GROUP BY risk_tier
+)
+
+SELECT
+    risk_tier,
+    total_transactions,
+    fraud_cases,
+    ROUND(
+        fraud_cases * 100.0 /
+        SUM(fraud_cases) OVER (),
+        2
+    ) AS pct_of_all_fraud
+FROM risk_summary
+ORDER BY
+    CASE risk_tier
+        WHEN 'Low' THEN 1
+        WHEN 'Medium' THEN 2
+        WHEN 'High' THEN 3
+    END;
+-- =====================================================
+-- 22. RANK STATES BY FRAUD RATE
+-- =====================================================
+
+WITH state_summary AS (
+    SELECT
+        sender_state,
+        COUNT(*) AS total_transactions,
+        SUM(fraud_flag) AS fraud_cases,
+        AVG(fraud_flag) * 100 AS fraud_rate_pct
+    FROM upi_transactions
+    GROUP BY sender_state
+    HAVING COUNT(*) >= 10000
+)
+
+SELECT
+    sender_state,
+    total_transactions,
+    fraud_cases,
+    ROUND(fraud_rate_pct, 3) AS fraud_rate_pct,
+    RANK() OVER (
+        ORDER BY fraud_rate_pct DESC
+    ) AS fraud_rate_rank
+FROM state_summary
+ORDER BY fraud_rate_rank;
+-- =====================================================
+-- 23. RISK SCORE RELATIVE TO OVERALL BASELINE
+-- =====================================================
+
+WITH overall AS (
+    SELECT
+        AVG(fraud_flag) AS overall_fraud_rate
+    FROM upi_transactions
+)
+
+SELECT
+    risk_score,
+    COUNT(*) AS total_transactions,
+    SUM(fraud_flag) AS fraud_cases,
+    ROUND(AVG(fraud_flag) * 100, 3) AS fraud_rate_pct,
+    ROUND(
+        AVG(fraud_flag) / overall.overall_fraud_rate,
+        2
+    ) AS relative_risk
+FROM upi_transactions
+CROSS JOIN overall
+GROUP BY risk_score, overall.overall_fraud_rate
+ORDER BY risk_score;
+-- =====================================================
+-- 24. HIGH-RISK FRAUD CONCENTRATION
+-- =====================================================
+
+SELECT
+    COUNT(*) AS high_risk_transactions,
+    SUM(fraud_flag) AS high_risk_fraud_cases,
+
+    ROUND(
+        COUNT(*) * 100.0 /
+        (SELECT COUNT(*) FROM upi_transactions),
+        2
+    ) AS pct_of_all_transactions,
+
+    ROUND(
+        SUM(fraud_flag) * 100.0 /
+        (SELECT SUM(fraud_flag) FROM upi_transactions),
+        2
+    ) AS pct_of_all_fraud
+FROM upi_transactions
+WHERE risk_tier = 'High';
+-- =====================================================
+-- 25. HIGH-VALUE FRAUD CONCENTRATION
+-- =====================================================
+
+SELECT
+    COUNT(*) AS high_value_transactions,
+    SUM(fraud_flag) AS high_value_fraud_cases,
+
+    ROUND(
+        COUNT(*) * 100.0 /
+        (SELECT COUNT(*) FROM upi_transactions),
+        2
+    ) AS pct_of_all_transactions,
+
+    ROUND(
+        SUM(fraud_flag) * 100.0 /
+        (SELECT SUM(fraud_flag) FROM upi_transactions),
+        2
+    ) AS pct_of_all_fraud
+FROM upi_transactions
+WHERE high_value_flag = 1;
